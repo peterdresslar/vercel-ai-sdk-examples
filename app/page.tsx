@@ -5,21 +5,24 @@ import { useEffect, useState } from 'react';
 
 export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('Claude');
+  const [enableLog, setEnableLog] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
-    // {api:'/api/chat/anthropic/route.ts'}
+    // {api:'/api/chat/anthropic/route.ts'} // in case we want to try two routes
   );
 
-  // lets useEffect to diagnose what is being sent to messages and send to console.log
-  // messages is an array of objects with id, role, and content, so we need to do some work to push to the console
+  // If user wants, let useEffect diagnose what is being sent to messages and send to console.log
   useEffect(() => {
-    if (messages.length = 0) {
-      console.log('no messages');
-    } else {
-      for (let i = 0; i < messages.length; i++) {
-        console.log(messages[i].role, messages[i].content);
+    if (enableLog) {
+      if (messages.length === 0) {
+        console.log('no messages');
+      } else {
+        for (let i = 0; i < messages.length; i++) {
+          console.log(messages[i].role, messages[i].content);
+        }
       }
     }
-  }, [messages]);
+  }
+    , [messages]);
 
   return (
     <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
@@ -34,12 +37,12 @@ export default function Chat() {
       {isLoading ?
         <div className="text-green-700">Loading...</div> // UseChat helper function to show loading message
         : null}
-      {error ? 
+      {error ?
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
         : null}
 
       <form onSubmit={handleSubmit}>
-        <div className="fixed w-full max-w-md bottom-0 ">
+        <div className="fixed w-full max-w-md bottom-4 ">
           <label>
             Say to {providerNickname}...
             <input
@@ -51,6 +54,17 @@ export default function Chat() {
           <button className="mx-2" type="submit">Send</button>
         </div>
       </form>
+      {/* Logging not in the example, but can be helpful */}
+      <div className="fixed w-full max-w-md bottom-1 ">
+        <label>
+          Enable client logging
+          <input
+            type="checkbox"
+            checked={enableLog}
+            onChange={() => setEnableLog(!enableLog)}
+          />
+        </label>
+      </div>
     </div>
   );
 }
