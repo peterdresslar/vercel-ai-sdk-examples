@@ -1,9 +1,10 @@
 'use client';
 
 import { useChat } from 'ai/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Chat() {
+  const [providerNickname, setProviderNickname] = useState('Claude');
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
     // {api:'/api/chat/anthropic/route.ts'}
   );
@@ -31,16 +32,16 @@ export default function Chat() {
 
       {/* These items are not in the example, but very helpful helper functions */}
       {isLoading ?
-        <div>Loading...</div> // UseChat helper function to show loading message
+        <div className="text-green-700">Loading...</div> // UseChat helper function to show loading message
         : null}
-      {error ?
+      {error ? 
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
         : null}
 
       <form onSubmit={handleSubmit}>
         <div className="fixed w-full max-w-md bottom-0 ">
           <label>
-            Say something...
+            Say to {providerNickname}...
             <input
               className="border border-gray-300 rounded mb-8 shadow-xl p-2"
               value={input}

@@ -63,7 +63,10 @@ export async function POST(req: Request) {
         }
 
         // Convert the response into a friendly text-stream
-        const stream = AnthropicStream(response);
+        const stream = AnthropicStream(response, {
+            // log tokens to the console, if you like
+            // onToken: (token) => console.log(token)
+        });
 
         // Respond with the stream
         return new StreamingTextResponse(stream);
