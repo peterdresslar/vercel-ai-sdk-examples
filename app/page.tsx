@@ -5,10 +5,24 @@ import { useEffect, useState } from 'react';
 
 export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('Claude');
+  const [successFlag, setSuccessFlag] = useState(false); // This is a flag to show the error message.
   const [enableLog, setEnableLog] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
-    // {api:'/api/chat/anthropic/route.ts'} // in case we want to try two routes
+    {
+      // api:'/api/chat/anthropic/route.ts' // in case we want to try two routes
+
+      // add an onFinish callback to set the success flag
+      onFinish: () => {
+        setSuccessFlag(true);
+      },
+    }
   );
+
+  // extend handleSubmit to clear the success flag. note type
+  const handleSubmitExtended = (e: React.FormEvent<HTMLFormElement>) => {
+    setSuccessFlag(false);
+    handleSubmit(e);
+  }
 
   // If user wants, let useEffect diagnose what is being sent to messages and send to console.log
   useEffect(() => {
@@ -37,7 +51,7 @@ export default function Chat() {
       {isLoading ?
         <div className="text-green-700">Loading...</div> // UseChat helper function to show loading message
         : null}
-      {error ?
+      {error && !successFlag ? // Right now, error does not get cleared on a successful submit. So we use a helper flag to know when to show it.
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
         : null}
 

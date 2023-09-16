@@ -1,1 +1,1 @@
-vercel ai sdk from the examples: anthropic without and wirh anthropic sdk
+vercel ai sdk from the examples: anthropic without and (coming soon?) with anthropic sdk
