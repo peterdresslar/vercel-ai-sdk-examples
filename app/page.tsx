@@ -55,7 +55,7 @@ export default function Chat() {
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
         : null}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitExtended}>
         <div className="fixed w-full max-w-md bottom-4 ">
           <label>
             Say to {providerNickname}...
