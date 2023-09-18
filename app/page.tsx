@@ -7,10 +7,10 @@ export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('Claude');
   const [successFlag, setSuccessFlag] = useState(false); // This is a flag to show the error message.
   const [enableLog, setEnableLog] = useState(false);
+  const [enableSDK, setEnableSDK] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
     {
-      // api:'/api/chat/anthropic/route.ts' // in case we want to try two routes
-
+      api:'./api/chat/anthropic',
       // add an onFinish callback to set the success flag
       onFinish: () => {
         setSuccessFlag(true);
@@ -23,6 +23,15 @@ export default function Chat() {
     setSuccessFlag(false);
     handleSubmit(e);
   }
+
+  // const handleEnableSDK = (e: React.FormEvent<HTMLFormElement>) => {
+  //   if (isLoading) { // If we are loading, we can't toggle the SDK
+  //     return;
+  //   }
+  //   //if we toggle, we have to rebuild the chat with a new useChat call with the new api. For clarity we set the api first
+  //   let api;
+  //   enableSDK ? api = '/api/chat/anthropic-sdk/route.ts' : api = '/api/chat/anthropic/route.ts';
+  //   //then we call useChat with the new api, passing in our current messages and input
 
   // If user wants, let useEffect diagnose what is being sent to messages and send to console.log
   useEffect(() => {
@@ -76,6 +85,14 @@ export default function Chat() {
             type="checkbox"
             checked={enableLog}
             onChange={() => setEnableLog(!enableLog)}
+          />
+        </label>
+        <label>
+          Enable Anthropic SDK
+          <input
+            type="checkbox"
+            checked={enableSDK}
+            onChange={() => setEnableLog(!enableSDK)}
           />
         </label>
       </div>
