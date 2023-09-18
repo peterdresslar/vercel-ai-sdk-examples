@@ -11,10 +11,11 @@ const anthropic = new Anthropic({
 export const runtime = 'edge';
 
 // Claude has an interesting way of dealing with prompts, so we use a helper function to build one from our request
+// Prompt formatting is discussed briefly at https://docs.anthropic.com/claude/reference/getting-started-with-the-api
 function buildPrompt(
     messages: { content: string; role: 'system' | 'user' | 'assistant' }[],
 ) {
-    const p = (
+    return (
         (Anthropic.HUMAN_PROMPT)
         +
         messages
@@ -28,8 +29,6 @@ function buildPrompt(
         +      
         (Anthropic.AI_PROMPT)
     );
-    console.log(p);
-    return p; 
 }
 
 export async function POST(req: Request) {
