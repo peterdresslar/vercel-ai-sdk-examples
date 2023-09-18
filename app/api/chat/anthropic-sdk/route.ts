@@ -10,13 +10,35 @@ const anthropic = new Anthropic({
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
+// Claude has an interesting way of dealing with prompts, so we use a helper function to build one from our request
+function buildPrompt(
+    messages: { content: string; role: 'system' | 'user' | 'assistant' }[],
+) {
+    const p = (
+        (Anthropic.HUMAN_PROMPT)
+        +
+        messages
+            .map(({ content, role }) => {
+                if (role === 'user') {
+                    return `Human: ${content}`;
+                } else {
+                    return `Assistant: ${content}`;
+                }
+            })
+        +      
+        (Anthropic.AI_PROMPT)
+    );
+    console.log(p);
+    return p; 
+}
+
 export async function POST(req: Request) {
   // Extract the `prompt` from the body of the request
   const { messages } = await req.json();
 
   // Ask Claude for a streaming chat completion given the prompt
   const response = await anthropic.completions.create({
-    prompt: `${Anthropic.HUMAN_PROMPT} ${messages} ${Anthropic.AI_PROMPT}`,
+    prompt: buildPrompt(messages),
     model: 'claude-2',
     stream: true,
     max_tokens_to_sample: 300,
