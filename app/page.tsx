@@ -7,10 +7,10 @@ export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('Claude');
   const [successFlag, setSuccessFlag] = useState(false); // This is a flag to show the error message.
   const [enableLog, setEnableLog] = useState(false);
-  const [enableSDK, setEnableSDK] = useState(false);
+  const [enableSDK, setEnableSDK] = useState(true);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
     {
-      api:'./api/chat/anthropic',
+      api:'./api/chat/anthropic-sdk',
       // add an onFinish callback to set the success flag
       onFinish: () => {
         setSuccessFlag(true);
@@ -30,9 +30,9 @@ export default function Chat() {
   //   }
   //   //if we toggle, we have to rebuild the chat with a new useChat call with the new api. For clarity we set the api first
   //   let api;
-  //   enableSDK ? api = '/api/chat/anthropic-sdk/route.ts' : api = '/api/chat/anthropic/route.ts';
-  //   //then we call useChat with the new api, passing in our current messages and input
-
+  //   enableSDK ? api = '/api/chat/anthropic-sdk' : api = '/api/chat/anthropic';
+  //   //then we replace useChat with the new api, passing in our current messages and input
+  //   useChat(
   // If user wants, let useEffect diagnose what is being sent to messages and send to console.log
   useEffect(() => {
     if (enableLog) {
