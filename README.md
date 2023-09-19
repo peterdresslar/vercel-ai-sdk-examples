@@ -1,1 +1,1 @@
-[vercel ai sdk](https://sdk.vercel.ai/) from the [examples](https://sdk.vercel.ai/docs/api-reference/use-chat): anthropic without and (coming soon?) with [anthropic sdk](https://docs.anthropic.com/claude/reference/client-sdks).
+[Vercel ai sdk](https://sdk.vercel.ai/) built mostly by following the [examples](https://sdk.vercel.ai/docs/api-reference/use-chat): anthropic without and (coming soon?) with [anthropic sdk](https://docs.anthropic.com/claude/reference/client-sdks).
