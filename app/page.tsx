@@ -1,28 +1,27 @@
 'use client';
 
 import { useChat } from 'ai/react';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('Claude');
   const [successFlag, setSuccessFlag] = useState(false); // This is a flag to show the error message.
   const [enableLog, setEnableLog] = useState(false);
   const [enableSDK, setEnableSDK] = useState(true);
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat(
-    {
-      api:'./api/chat/anthropic-sdk',
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
+    useChat({
+      api: './api/chat/anthropic-sdk',
       // add an onFinish callback to set the success flag
       onFinish: () => {
         setSuccessFlag(true);
       },
-    }
-  );
+    });
 
   // extend handleSubmit to clear the success flag. note type
   const handleSubmitExtended = (e: React.FormEvent<HTMLFormElement>) => {
     setSuccessFlag(false);
     handleSubmit(e);
-  }
+  };
 
   // const handleEnableSDK = (e: React.FormEvent<HTMLFormElement>) => {
   //   if (isLoading) { // If we are loading, we can't toggle the SDK
@@ -44,8 +43,7 @@ export default function Chat() {
         }
       }
     }
-  }
-    , [messages]);
+  }, [messages]);
 
   return (
     <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch">
@@ -57,12 +55,12 @@ export default function Chat() {
       ))}
 
       {/* These items are not in the example, but very helpful helper functions */}
-      {isLoading ?
+      {isLoading ? (
         <div className="text-green-700">Loading...</div> // UseChat helper function to show loading message
-        : null}
-      {error && !successFlag ? // Right now, error does not get cleared on a successful submit. So we use a helper flag to know when to show it.
+      ) : null}
+      {error && !successFlag ? ( // Right now, error does not get cleared on a successful submit. So we use a helper flag to know when to show it.
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
-        : null}
+      ) : null}
 
       <form onSubmit={handleSubmitExtended}>
         <div className="fixed w-full max-w-md bottom-4 ">
@@ -74,7 +72,9 @@ export default function Chat() {
               onChange={handleInputChange}
             />
           </label>
-          <button className="mx-2" type="submit">Send</button>
+          <button className="mx-2" type="submit">
+            Send
+          </button>
         </div>
       </form>
       {/* Logging not in the example, but can be helpful */}
