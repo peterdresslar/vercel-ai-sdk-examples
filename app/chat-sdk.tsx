@@ -32,7 +32,7 @@ export default function ChatSDK() {
         }
       }
     }
-  }, [messages]);
+  }, [messages, enableLog]);
 
   return (
     <div>

@@ -32,7 +32,7 @@ export default function Chat() {
         }
       }
     }
-  }, [messages]);
+  }, [messages, enableLog]);
 
   return (
     <div>

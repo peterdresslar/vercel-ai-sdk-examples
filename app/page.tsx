@@ -13,14 +13,16 @@ export default function App() {
   return (
     <div className="mx-auto w-full max-w-md pb-24 flex flex-col stretch">
       <div className="mt-2">
-              <label>
-        Enable Anthropic SDK
-        <input type="checkbox"
-          checked={enableSDK}
-          onChange={() => setEnableSDK(!enableSDK)} />
-      </label>
-      {/* swapping in the component that is hooked to the route in question, since this is the most reactful way */}
-      {enableSDK ? <ChatSdk /> : <Chat />}
+        <label>
+          Enable Anthropic SDK
+          <input
+            type="checkbox"
+            checked={enableSDK}
+            onChange={() => setEnableSDK(!enableSDK)}
+          />
+        </label>
+        {/* swapping in the component that is hooked to the route in question, since this is the most reactful way */}
+        {enableSDK ? <ChatSdk /> : <Chat />}
       </div>
     </div>
   );
