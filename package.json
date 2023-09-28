@@ -1,5 +1,5 @@
 {
-  "name": "ai-edge-example-anthropic",
+  "name": "vercel-ai-sdk-examples",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "prettier": "3.0.3"
   },
   "prettier": {
