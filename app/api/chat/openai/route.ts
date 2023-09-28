@@ -18,10 +18,8 @@ const saveToSupabase = async (messages: String, result: String) => {
     .insert([{ messages: messages, response: result }])
     .select();
   if (error) {
-    console.log('m ' + error.message);
-    console.log('h ' + error.hint);
-    console.log('d ' + error.details);
-    return -1;
+    console.log('Supabase error! ' + error.message);
+    return -1; //or whatever you want to do here
   }
   if (data) {
     return data[0].id;
@@ -41,12 +39,24 @@ export async function POST(req: Request) {
     stream: true,
     messages,
   });
-  // Convert the response into a friendly text-stream
+  // Since we are using a stream, we need to paste together the chunks to create a final completion to store to the db
+  // we will use the onCompletion and onFinal events to do this.
+
+  // fullChunky will be the string we use to build up the final completion
+  let fullChunky = '';
+
+  // let's get chunky
   const stream = OpenAIStream(response, {
-    onFinal: async (result: string) => {
-      // Save messages, response to supabase and return the record so we can send the id and created_at to the client
-      console.log(result);
-      const id = await saveToSupabase(JSON.stringify(messages), result);
+    onCompletion: (chunk: string) => {
+      // Save the chunk
+      console.log(chunk + '\n');
+      fullChunky += chunk;
+    },
+    onFinal: async (completion: string) => {
+      // Save messages, response to supabase and return the record id
+      console.log(completion);
+      //console.log(fullChunky);
+      const id = await saveToSupabase(JSON.stringify(messages), fullChunky);
       console.log(id);
     },
   });
