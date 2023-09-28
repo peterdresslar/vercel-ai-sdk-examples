@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   // Ask OpenAI for a streaming completion given the prompt
   const completion = await openai.completions.create({
     model: 'text-davinci-003',
-    max_tokens: 4000,
+    max_tokens: 500,
     stream: true,
     prompt,
   });
