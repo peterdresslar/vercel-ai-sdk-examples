@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     }
 
     // Convert the response into a friendly text-stream, keeping in mind the type that openai completions returns
-    const stream = OpenAIStream(completion as any); //presuming we are safe with completions
+    const stream = OpenAIStream(completion as any); //presuming we are safe with completions API
 
     // Respond with the stream
     return new StreamingTextResponse(stream);
