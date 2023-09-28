@@ -25,7 +25,7 @@ export default function Completion() {
     if (enableLog) {
       console.log(noun, verb);
     }
-  }, [noun, verb]);
+  }, [noun, verb, enableLog]);
 
   // extend handleSubmit to clear the success flag. note type
   const handleSubmitExtended = (e: React.FormEvent<HTMLFormElement>) => {
