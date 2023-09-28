@@ -25,4 +25,10 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI Completion',
     component: 'completion.tsx',
   },
+  //multi-prompt completion
+  {
+    name: 'multi-prompt-completion',
+    label: 'OpenAI Multi-Prompt Completion',
+    component: 'multi-prompt-completion.tsx',
+  },
 ];
