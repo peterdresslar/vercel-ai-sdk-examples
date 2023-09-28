@@ -11,7 +11,7 @@ export default function Completion() {
     handleInputChange,
     handleSubmit,
   } = useCompletion({
-    api: '/api/completion',
+    api: '/api/completion/openai',
   });
 
   return (
