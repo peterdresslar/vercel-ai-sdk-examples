@@ -31,4 +31,10 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI Multi-Prompt Completion',
     component: 'multi-prompt-completion.tsx',
   },
+  //openai chat with supabase
+  {
+    name: 'openai-chat-with-supabase',
+    label: 'OpenAI Chat with Supabase',
+    component: 'openai-chat-with-supabase.tsx',
+  },
 ];
