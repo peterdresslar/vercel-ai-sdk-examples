@@ -52,10 +52,9 @@ export async function POST(req: Request) {
       console.log(chunk + '\n');
       fullChunky += chunk;
     },
-    onFinal: async (completion: string) => {
+    onFinal: async () => {
       // Save messages, response to supabase and return the record id
-      console.log(completion);
-      //console.log(fullChunky);
+      console.log(fullChunky);
       const id = await saveToSupabase(JSON.stringify(messages), fullChunky);
       console.log(id);
     },
