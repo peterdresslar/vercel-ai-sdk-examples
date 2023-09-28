@@ -49,7 +49,7 @@ export default function Completion() {
       ) : null}
 
       <form onSubmit={handleSubmitExtended}>
-        <div className="fixed w-full max-w-md bottom-4 ">
+        <div className="fixed flex w-[300px] bottom-4 ">
           <label>
             Say a Noun...
             <input
@@ -58,7 +58,7 @@ export default function Completion() {
               onChange={e => setNoun(e.target.value)}
             />
           </label>
-          <label>
+          <label className="ml-2">
             Say a Verb...
             <input
               className="border border-gray-300 rounded mb-8 shadow-xl p-2"
