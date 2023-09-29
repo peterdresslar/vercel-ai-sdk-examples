@@ -42,20 +42,23 @@ export async function POST(req: Request) {
   // Since we are using a stream, we need to paste together the chunks to create a final completion to store to the db
   // we will use the onCompletion and onFinal events to do this.
 
-  // fullChunky will be the string we use to build up the final completion
-  let fullChunky = '';
+  // using completionString to build up the final completion
+  let completionString = '';
 
   // let's get chunky
   const stream = OpenAIStream(response, {
     onCompletion: (chunk: string) => {
       // Save the chunk
       console.log(chunk + '\n');
-      fullChunky += chunk;
+      completionString += chunk;
     },
     onFinal: async () => {
       // Save messages, response to supabase and return the record id
-      console.log(fullChunky);
-      const id = await saveToSupabase(JSON.stringify(messages), fullChunky);
+      console.log(completionString);
+      const id = await saveToSupabase(
+        JSON.stringify(messages),
+        completionString,
+      );
       console.log(id);
     },
   });
