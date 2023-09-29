@@ -1,3 +1,6 @@
+// IMPORTANT! Set the runtime to edge
+export const runtime = 'edge';
+
 import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 
@@ -6,12 +9,10 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// IMPORTANT! Set the runtime to edge
-export const runtime = 'edge';
-
 export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { messages } = await req.json();
+  console.log(`streaming`);
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
@@ -22,19 +23,19 @@ export async function POST(req: Request) {
   const stream = OpenAIStream(response, {
     onStart: () => {
       // Do something when the stream starts
-      console.log('stream started!');
+      console.log(`stream started!`);
     },
     onToken: (chunk: string) => {
       // Add the chunk
-      console.log('this is a token!' + chunk);
+      console.log(`this is a token! ${chunk}`);
     },
     onCompletion: (completion: string) => {
       // Save the chunk
-      console.log('this is a completion!' + completion);
+      console.log(`this is a completion! ${completion}`);
     },
     onFinal: (completion: string) => {
       // Save messages, response to supabase and return the record id
-      console.log('this is the final!' + completion);
+      console.log(`this is the final! ${completion}`);
     },
   });
 

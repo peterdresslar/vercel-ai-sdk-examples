@@ -1,3 +1,6 @@
+// IMPORTANT! Set the runtime to edge
+export const runtime = 'edge';
+
 import OpenAI from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { createClient } from '@supabase/supabase-js';
@@ -26,9 +29,6 @@ const saveToSupabase = async (messages: String, result: String) => {
   }
 };
 
-// IMPORTANT! Set the runtime to edge
-export const runtime = 'edge';
-
 export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { messages } = await req.json();
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       // Save messages, response to supabase and return the record id
       console.log(completionString);
       const id = await saveToSupabase(
-        JSON.stringify(messages),
+        JSON.stringify(messages), //important! stringify the messages
         completionString,
       );
       console.log(id);
