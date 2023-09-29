@@ -37,4 +37,10 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI Chat with Supabase',
     component: 'openai-chat-with-supabase.tsx',
   },
+  //openai stream with handlers
+  {
+    name: 'openai-stream-with-handlers',
+    label: 'OpenAI Stream with Handlers',
+    component: 'openai-stream-with-handlers.tsx',
+  },
 ];
