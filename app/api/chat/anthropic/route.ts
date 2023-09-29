@@ -1,7 +1,6 @@
-import { AnthropicStream, StreamingTextResponse } from 'ai';
-
-// IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
+
+import { AnthropicStream, StreamingTextResponse } from 'ai';
 
 // Build a prompt from the messages
 function buildPrompt(

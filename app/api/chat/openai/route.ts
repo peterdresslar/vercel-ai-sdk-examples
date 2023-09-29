@@ -1,4 +1,3 @@
-// IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
 import OpenAI from 'openai';
