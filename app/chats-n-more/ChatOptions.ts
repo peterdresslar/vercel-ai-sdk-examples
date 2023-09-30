@@ -43,4 +43,10 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI Stream with Handlers',
     component: 'openai-stream-with-handlers.tsx',
   },
+  //openai with functions
+  {
+    name: 'openai-with-functions',
+    label: 'OpenAI with Functions',
+    component: 'openai-with-functions.tsx',
+  },
 ];
