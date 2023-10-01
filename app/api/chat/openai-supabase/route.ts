@@ -51,9 +51,9 @@ export async function POST(req: Request) {
       console.log(chunk);
       completionString += chunk;
     },
-    onFinal: async () => {
+    onFinal: async (final: string) => {
       // Save messages, response to supabase and return the record id
-      console.log(completionString);
+      console.log(final);
       const id = await saveToSupabase(
         JSON.stringify(messages), //important! stringify the messages
         completionString,
