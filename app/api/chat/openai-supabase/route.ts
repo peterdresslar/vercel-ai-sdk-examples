@@ -32,33 +32,22 @@ export async function POST(req: Request) {
   // Extract the `messages` from the body of the request
   const { messages } = await req.json();
 
+  console.log('streaming');
+
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     stream: true,
     messages,
   });
-  // Since we are using a stream, we need to paste together the chunks to create a final completion to store to the db
-  // we will use the onCompletion and onFinal events to do this.
-
-  // using completionString to build up the final completion
-  let completionString = '';
 
   // let's get chunky
   const stream = OpenAIStream(response, {
-    onToken: (chunk: string) => {
-      // Add the chunk
-      console.log(chunk);
-      completionString += chunk;
-    },
-    onFinal: async (final: string) => {
+    onCompletion: async (final: string) => {
       // Save messages, response to supabase and return the record id
-      console.log(final);
-      const id = await saveToSupabase(
-        JSON.stringify(messages), //important! stringify the messages
-        completionString,
-      );
-      console.log(id);
+      console.log(`completion: ${final}`);
+      const recordId = await saveToSupabase(messages, final);
+      console.log(`record id: ${recordId}`);
     },
   });
 
