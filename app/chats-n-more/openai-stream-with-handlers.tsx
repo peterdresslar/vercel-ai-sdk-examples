@@ -9,7 +9,7 @@ export default function Chat() {
   const [enableLog, setEnableLog] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
     useChat({
-      api: './api/chat/openai-supabase',
+      api: './api/chat/openai',
       // add an onFinish callback to set the success flag
       onFinish: () => {
         setSuccessFlag(true);
