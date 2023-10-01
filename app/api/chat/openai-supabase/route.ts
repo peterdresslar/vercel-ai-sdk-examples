@@ -41,12 +41,11 @@ export async function POST(req: Request) {
     messages,
   });
 
-  // let's get chunky
   const stream = OpenAIStream(response, {
     onCompletion: async (final: string) => {
       // Save messages, response to supabase and return the record id
       console.log(`completion: ${final}`);
-      const recordId = await saveToSupabase(messages, final);
+      const recordId = await saveToSupabase(JSON.stringify(messages), final);
       console.log(`record id: ${recordId}`);
     },
   });
