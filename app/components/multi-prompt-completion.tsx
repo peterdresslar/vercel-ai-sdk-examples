@@ -15,10 +15,6 @@ export default function Completion() {
 
   const { completion, input, complete, isLoading, error } = useCompletion({
     api: './api/completion/openai',
-    // add an onFinish callback to set the success flag
-    //   onFinish: () => {
-    //     setSuccessFlag(true);
-    //   },
   });
 
   useEffect(() => {
