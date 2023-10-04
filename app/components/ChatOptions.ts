@@ -49,4 +49,10 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI with Functions',
     component: 'openai-with-functions.tsx',
   },
+  //openai functions with custom frontend
+  {
+    name: 'openai-functions-custom-frontend',
+    label: 'OpenAI Functions with Custom Frontend',
+    component: 'openai-functions-custom-frontend.tsx',
+  },
 ];
