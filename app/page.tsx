@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { ChatOption, ChatOptions } from './chats-n-more/ChatOptions';
+import { ChatOption, ChatOptions } from './components/ChatOptions';
 
 export default function App() {
   const [chatChoice, setChatChoice] = useState(ChatOptions[0]);
@@ -11,7 +11,7 @@ export default function App() {
   useEffect(() => {
     console.log(chatChoice);
 
-    import(`./chats-n-more/${chatChoice.component}`)
+    import(`./components/${chatChoice.component}`)
       .then(module => {
         setDynamicComponent(() => module.default);
       })

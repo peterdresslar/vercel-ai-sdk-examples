@@ -28,7 +28,7 @@ export default function Chat() {
         console.log('no messages');
       } else {
         for (let i = 0; i < messages.length; i++) {
-          console.log(messages[i].role, messages[i].content);
+          console.log(messages[i].role, messages[i].content, messages[i].id);
         }
       }
     }
