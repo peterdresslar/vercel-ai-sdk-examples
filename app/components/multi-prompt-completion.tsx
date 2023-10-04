@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 export default function Completion() {
   const [providerNickname, setProviderNickname] =
     useState('OpenAI Completions');
-  const [successFlag, setSuccessFlag] = useState(false); // This is a flag to show the error message.
   const [enableLog, setEnableLog] = useState(false);
 
   //our two input states, one for noun and one for verb
@@ -26,7 +25,6 @@ export default function Completion() {
   // extend handleSubmit to clear the success flag. note type
   const handleSubmitExtended = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSuccessFlag(false);
     complete(
       `Good luck, thank you, and I know you can do this! Please create a phrase incorporating the noun ${noun} and verb ${verb} that works as a company name. Be creative. If you are having trouble let me know.`,
     );
@@ -40,7 +38,7 @@ export default function Completion() {
       {isLoading ? (
         <div className="text-green-700">Loading...</div> // UseChat helper function to show loading message
       ) : null}
-      {error && !successFlag ? ( // Right now, error does not get cleared on a successful submit. So we use a helper flag to know when to show it.
+      {error ? ( // Right now, error does not get cleared on a successful submit. So we use a helper flag to know when to show it.
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
       ) : null}
 
