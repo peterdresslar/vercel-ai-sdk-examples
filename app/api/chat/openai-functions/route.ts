@@ -21,10 +21,32 @@ async function getCurrentWeather(
   return JSON.stringify(weatherInfo);
 }
 
+async function getSpecial() {
+  const specialInfo = {
+    special: true,
+  };
+  return JSON.stringify(specialInfo);
+}
+
 const functions = [
   {
     name: 'get_current_weather',
     description: 'Get the current weather in a given location',
+    parameters: {
+      type: 'object',
+      properties: {
+        location: {
+          type: 'string',
+          description: 'The city and state, e.g. San Francisco, CA',
+        },
+        unit: { type: 'string', enum: ['celsius', 'fahrenheit'] },
+      },
+      required: ['location'],
+    },
+  },
+  {
+    name: 'get_special',
+    description: 'If somebody is a secret agent, they get special treatment',
     parameters: {
       type: 'object',
       properties: {

@@ -12,6 +12,9 @@ export default function Completion() {
     handleSubmit,
   } = useCompletion({
     api: '/api/completion/openai',
+    onFinish: (prompt: string, completion: string) => {
+      console.log('onFinish is', completion);
+    },
   });
 
   return (

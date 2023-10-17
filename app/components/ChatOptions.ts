@@ -49,6 +49,18 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI with Functions',
     component: 'openai-with-functions.tsx',
   },
+  //openai with semi-custom frontend
+  {
+    name: 'openai-with-semi-custom-frontend',
+    label: 'OpenAI with Semi-Custom Frontend',
+    component: 'openai-with-semi-custom-frontend.tsx',
+  },
+  //openai with experimental_Streamdata
+  // {
+  //   name: 'openai-with-experimental-streamdata',
+  //   label: 'OpenAI with Experimental Streamdata',
+  //   component: 'openai-with-experimental-streamdata.tsx',
+  // },
   //openai functions with custom frontend
   // {
   //   name: 'openai-functions-custom-frontend',

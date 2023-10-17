@@ -1,6 +1,6 @@
 export const runtime = 'edge';
 
-import OpenAI from 'openai';
+import { OpenAI } from 'openai';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 
 // Create an OpenAI API client (that's edge friendly!)
@@ -23,10 +23,11 @@ export async function POST(req: Request) {
 
   // Convert the response into a friendly text-stream, keeping in mind the type that openai completions returns
   const stream = OpenAIStream(completion as any, {
+    //for now...
     onToken: token => {
       console.log(token);
     },
-  }); //presuming we are safe with completions API. Not a good final solution.
+  });
 
   // Respond with the stream
   return new StreamingTextResponse(stream);

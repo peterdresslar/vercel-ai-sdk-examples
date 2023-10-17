@@ -1,32 +1,23 @@
-// THIS IS STILL WIP
-
 'use client';
 
 import { useChat } from 'ai/react';
 import { useEffect, useState } from 'react';
-
-// CustomMessage interface just like Message, but with a isSpecial flag:
-interface CustomMessage {
-  id: string;
-  content: string;
-  role: string;
-  isSpecial: boolean;
-}
-
-const checkIsSpecial = (content: string) => {
-  if (content.includes('special')) {
-    return true;
-  }
-  return false;
-};
 
 export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('ChatGPT-3.5');
   const [enableLog, setEnableLog] = useState(false);
   const [customMessages, setCustomMessages] = useState<CustomMessage[]>([]);
   const { input, handleInputChange, handleSubmit, isLoading, error } = useChat({
-    api: './api/chat/openai-functions',
+    api: './api/chat/openai-handlers',
   });
+
+  // CustomMessage interface just like Message, but with a isSpecial flag:
+  interface CustomMessage {
+    id: string;
+    content: string;
+    role: string;
+    isLeetified: boolean;
+  }
 
   useEffect(() => {
     if (enableLog) {
@@ -34,29 +25,67 @@ export default function Chat() {
         console.log('no messages');
       } else {
         for (let i = 0; i < customMessages.length; i++) {
-          console.log(JSON.stringify(customMessages[i]));
+          console.log(customMessages[i].content, customMessages[i].isLeetified);
         }
       }
     }
   }, [customMessages, enableLog]);
 
+  // Process content by turning it into 1337speek:
+  const customContentProcessor = (content: string) => {
+    return content.replace(/a/g, '4').replace(/e/g, '3').replace(/i/g, '1');
+  };
+
   // Our custom fetch function that plugs fetch results into CustomMessage objects:
-  const fetchCustomMessages = async () => {
-    const response = await fetch('./api/chat/openai-functions');
-    const data = await response.json();
-    // Log raw response chunks as they arrive:
-    if (enableLog) {
-      console.log(data);
-    }
-    const newMessages = data.messages.map((m: any) => {
-      return {
-        id: m.id,
-        content: m.content,
-        role: m.role,
-        isSpecial: checkIsSpecial(m.content),
-      };
+  const fetchCustomMessages = async (
+    onResponse?: (res: Response) => Promise<void>,
+  ) => {
+    const response = await fetch('./api/chat/openai-handlers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        messages: customMessages,
+      }),
+    }).catch(err => {
+      console.log(err); //you might want to do something here to handle errors and restore state of customMessages
+      throw err;
     });
-    setCustomMessages(newMessages);
+
+    if (onResponse) {
+      try {
+        await onResponse(response);
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    if (!response.ok) {
+      // Restore the previous messages if the request fails.
+      throw new Error(
+        (await response.text()) || 'Failed to fetch the chat response.',
+      );
+    }
+
+    if (!response.body) {
+      throw new Error('The response body is empty.');
+    }
+
+    // const newMessages = response.messages.map((m: any) => {
+    //   return {
+    //     id: m.id,
+    //     content: customContentProcessor(m.content),
+    //     role: m.role,
+    //     isLeetified: true,
+    //   };
+    // });
+    // setCustomMessages(newMessages);
+  };
+
+  const customHandleSubmit = (e: any) => {
+    e.preventDefault();
+    fetchCustomMessages();
   };
 
   return (
@@ -76,7 +105,7 @@ export default function Chat() {
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
       ) : null}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={customHandleSubmit}>
         <div className="fixed w-full max-w-md bottom-4 ">
           <label>
             Say to {providerNickname}...
