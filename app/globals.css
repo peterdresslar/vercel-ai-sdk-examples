@@ -25,3 +25,14 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* use dark text on light controls in dark mode */
+@media (prefers-color-scheme: dark) {
+  input,
+  textarea,
+  select,
+  button {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-end-rgb));
+  }
+}
