@@ -7,17 +7,29 @@ export interface ChatOption {
 }
 
 export const ChatOptions: ChatOption[] = [
+  //anthropic-chat
+  {
+    name: 'anthropic-chat',
+    label: 'Anthropic Chat',
+    component: 'anthropic-chat.tsx',
+  },
   //anthropic-chat-sdk
   {
     name: 'anthropic-chat-sdk',
     label: 'Anthropic Chat SDK',
     component: 'anthropic-chat-sdk.tsx',
   },
-  //anthropic-chat
+  //anthropic sdk with prompts
   {
-    name: 'anthropic-chat',
-    label: 'Anthropic Chat',
-    component: 'anthropic-chat.tsx',
+    name: 'anthropic-chat-sdk-with-prompts',
+    label: 'Anthropic SDK with Prompts',
+    component: 'anthropic-chat-sdk-with-prompts.tsx',
+  },
+  //huggingface oasst
+  {
+    name: 'huggingface-oasst',
+    label: 'Huggingface OASST',
+    component: 'huggingface-oasst.tsx',
   },
   //completion
   {
@@ -55,6 +67,25 @@ export const ChatOptions: ChatOption[] = [
     label: 'OpenAI with Semi-Custom Frontend',
     component: 'openai-with-semi-custom-frontend.tsx',
   },
+  //openai stream with prompts
+  {
+    name: 'openai-stream-with-prompts',
+    label: 'OpenAI Stream with Prompts',
+    component: 'openai-stream-with-prompts.tsx',
+  },
+  //replicate llama2 chat
+  {
+    name: 'replicate-llama2-chat',
+    label: 'Replicate Llama2 Chat',
+    component: 'replicate-llama2-chat.tsx',
+  },
+  //langchain from example
+  {
+    name: 'langchain-from-example',
+    label: 'Langchain from Example',
+    component: 'langchain-from-example.tsx',
+  },
+
   //openai with experimental_Streamdata
   // {
   //   name: 'openai-with-experimental-streamdata',
