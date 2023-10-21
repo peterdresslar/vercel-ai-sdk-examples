@@ -85,6 +85,12 @@ export const ChatOptions: ChatOption[] = [
     label: 'Langchain from Example',
     component: 'langchain-from-example.tsx',
   },
+  //langchain from example update
+  {
+    name: 'langchain-example-update',
+    label: 'Langchain from Example Updated',
+    component: 'langchain-example-update.tsx',
+  },
 
   //openai with experimental_Streamdata
   // {
