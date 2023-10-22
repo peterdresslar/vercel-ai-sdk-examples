@@ -56,11 +56,11 @@ export const ChatOptions: ChatOption[] = [
     component: 'openai-with-semi-custom-frontend.tsx',
   },
   //openai with experimental_Streamdata
-  // {
-  //   name: 'openai-with-experimental-streamdata',
-  //   label: 'OpenAI with Experimental Streamdata',
-  //   component: 'openai-with-experimental-streamdata.tsx',
-  // },
+  {
+    name: 'openai-experimental-streamdata',
+    label: 'OpenAI with Experimental Streamdata',
+    component: 'openai-experimental-streamdata.tsx',
+  },
   //openai functions with custom frontend
   // {
   //   name: 'openai-functions-custom-frontend',
