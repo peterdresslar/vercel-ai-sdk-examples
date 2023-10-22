@@ -40,7 +40,7 @@ export default function Chat() {
           {m.content}
         </div>
       ))}
-      <div>{finishReason}</div>
+      <div className="text-blue-500 text-sm">{finishReason}</div>
 
       {/* These items are not in the example, but very helpful helper functions */}
       {isLoading ? (
