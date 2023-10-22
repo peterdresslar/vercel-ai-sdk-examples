@@ -21,12 +21,14 @@ export default function Chat() {
 
   useEffect(() => {
     if (data && enableLog) {
-      console.log(data);
+      console.log(JSON.stringify(data));
     }
     //setFinishReason to the last text value in array `data`.
-
     if (data) {
-      setFinishReason(data[data.length - 1].text);
+      const lastItem = data[data.length - 1];
+      if (lastItem && lastItem.text) {
+        setFinishReason(lastItem.text);
+      }
     }
   }, [data, enableLog]);
 
