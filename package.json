@@ -10,7 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.6.8",
+    "@anthropic-ai/sdk": "^0.7.0",
     "@supabase/supabase-js": "^2.38.2",
     "@types/node": "^20.8.7",
     "@types/react": "^18.2.31",

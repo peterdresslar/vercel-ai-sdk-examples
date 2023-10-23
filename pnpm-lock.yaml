@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@anthropic-ai/sdk':
-    specifier: ^0.6.8
-    version: 0.6.8
+    specifier: ^0.7.0
+    version: 0.7.0
   '@supabase/supabase-js':
     specifier: ^2.38.2
     version: 2.38.2
@@ -88,8 +88,8 @@ packages:
       '@jridgewell/trace-mapping': 0.3.20
     dev: false
 
-  /@anthropic-ai/sdk@0.6.8:
-    resolution: {integrity: sha512-z4gDFrBf+W2wOVvwA3CA+5bfKOxQhPeXQo7+ITWj3r3XPulIMEasVT0KrD41G+anr5Yc3d2PKvXKB6b1LSon5w==}
+  /@anthropic-ai/sdk@0.7.0:
+    resolution: {integrity: sha512-qEXJ+R9LcNhSYM8Av/9dUALtNnvo2ub3IaF4WXipHLOoawFF6zJprCjzYDrnE8M4WNmEGvD11BSt0REUlv8MMQ==}
     dependencies:
       '@types/node': 18.18.6
       '@types/node-fetch': 2.6.7
