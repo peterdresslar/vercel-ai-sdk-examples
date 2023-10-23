@@ -57,9 +57,9 @@ export const ChatOptions: ChatOption[] = [
   },
   //openai with experimental_Streamdata
   {
-    name: 'openai-experimental-streamdata',
-    label: 'OpenAI with Experimental Streamdata',
-    component: 'openai-experimental-streamdata.tsx',
+    name: 'openai-experimental-streamdata-finish',
+    label: 'OpenAI with Experimental Streamdata FinishReason',
+    component: 'openai-experimental-streamdata-finish.tsx',
   },
   //openai with experimental_Streamdata timestamps
   {

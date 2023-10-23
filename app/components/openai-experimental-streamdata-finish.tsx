@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat } from 'ai/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('ChatGPT-3.5');
@@ -19,18 +19,39 @@ export default function Chat() {
     api: './api/chat/openai-experimental-streamdata',
   });
 
+  //lastData useRef to only update finish reason when data actually updates
+  const lastData = useRef(null);
+
   useEffect(() => {
     if (data && enableLog) {
       console.log(JSON.stringify(data));
     }
-    //setFinishReason to the last text value in array `data`.
-    if (data) {
-      const lastItem = data[data.length - 1];
-      if (lastItem && lastItem.text) {
-        setFinishReason(lastItem.text);
+    if (data && JSON.stringify(data) !== JSON.stringify(lastData.current)) {
+      const lastItem = data[data.length - 2];
+
+      if (lastItem) {
+        if (lastItem.text) {
+          setFinishReason(lastItem.text);
+        } else {
+          console.warn(
+            'Last item exists but no text property found:',
+            lastItem,
+          );
+        }
+      } else {
+        console.warn('Data exists but last item is undefined:', data);
       }
+
+      lastData.current = data; // Update lastData ref to current data
     }
   }, [data, enableLog]);
+
+  // we extend the handleSubmit function to clear the finish reason when the user submits a new message
+  const handleSubmitExtended = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFinishReason('');
+    handleSubmit(e);
+  };
 
   return (
     <div>
@@ -50,7 +71,7 @@ export default function Chat() {
         <div className="text-red-500">Error: {error.message}</div> // UseChat helper function to show error message
       ) : null}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmitExtended}>
         <div className="fixed w-full max-w-md bottom-4 ">
           <label>
             Say to {providerNickname}...
