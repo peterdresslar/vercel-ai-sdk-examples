@@ -61,7 +61,7 @@ export async function POST(req: Request) {
           data.append({ text: `finish reason ${reason}` });
           // append a time-stamp, just a user-friendly string with the time in seconds.
           const ts = new Date();
-          const timestamp = `${ts.getHours()}:${ts.getMinutes()}:${ts.getSeconds()}`;
+          const timestamp = ts.toTimeString();
           data.append({ timestamp });
           data.close();
         });
@@ -88,7 +88,6 @@ export async function POST(req: Request) {
 
       if (match && match[1]) {
         finishReason = match[1];
-        console.log(`match: ${finishReason}`);
         resolveFinishPromise(finishReason);
         return;
       }

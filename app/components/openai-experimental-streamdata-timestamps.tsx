@@ -26,35 +26,31 @@ export default function Chat() {
 
   // Utility function to set the timestamp to each message
   const setDisplayMessagesTimestamp = (data: any[]) => {
-    // Start by copying the existing messages to a mutable array (with a type assertion to bribe the IDE into quieting down)
     let extendedMessages: DisplayMessage[] = [
       ...(messages as DisplayMessage[]),
     ];
-
-    // Initialize a pointer for the data array
     let dataPointer = 0;
+    let isChanged = false;
 
-    // Loop through the existing messages and apply timestamps sequentially
     for (let i = 0; i < extendedMessages.length; i++) {
-      // If the message role is 'assistant', we want to apply the timestamp
       if (extendedMessages[i].role === 'assistant') {
-        // Find the next timestamp in the data array
         while (dataPointer < data.length && !data[dataPointer].timestamp) {
           dataPointer++;
         }
 
-        // Apply the timestamp if one is found
         if (dataPointer < data.length && data[dataPointer].timestamp) {
-          extendedMessages[i].timestamp = data[dataPointer].timestamp;
-
-          // Move the data pointer ahead for the next iteration
+          if (extendedMessages[i].timestamp !== data[dataPointer].timestamp) {
+            extendedMessages[i].timestamp = data[dataPointer].timestamp;
+            isChanged = true;
+          }
           dataPointer++;
         }
       }
     }
 
-    // Update the state with the newly extended messages
-    setDisplayMessages(extendedMessages);
+    if (isChanged) {
+      setDisplayMessages(extendedMessages);
+    }
   };
 
   useEffect(() => {
@@ -65,7 +61,7 @@ export default function Chat() {
     if (data && data.length > 0) {
       setDisplayMessagesTimestamp(data);
     }
-  }, [data, enableLog, messages, setDisplayMessagesTimestamp]); // Added messages as a dependency
+  }, [data, enableLog, setDisplayMessagesTimestamp]);
 
   return (
     <div>
@@ -73,7 +69,14 @@ export default function Chat() {
         <div key={m.id}>
           {m.role === 'user' ? 'User: ' : 'AI: '}
           {m.content}
-          {m.timestamp}
+          <span className="ml-2 text-sm font-mono">
+            {m.role === 'assistant' ? (
+              <>
+                Server timestamp: {m.timestamp} Client timestamp:{' '}
+                {m.createdAt ? m.createdAt.toTimeString() : 'N/A'}
+              </>
+            ) : null}
+          </span>
         </div>
       ))}
       <div className="text-blue-500 text-sm">{finishReason}</div>
