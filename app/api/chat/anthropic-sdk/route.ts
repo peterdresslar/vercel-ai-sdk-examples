@@ -36,6 +36,7 @@ export async function POST(req: Request) {
     model: 'claude-2',
     stream: true,
     max_tokens_to_sample: 300,
+    temperature: 0.9,
   });
   // Convert the response into a friendly text-stream
   const stream = AnthropicStream(response);
