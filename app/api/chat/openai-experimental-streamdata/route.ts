@@ -51,14 +51,18 @@ export async function POST(req: Request) {
       onCompletion(completion) {
         console.log('completion', completion);
       },
-      onFinal(completion) {
-        console.log('final', completion);
+      onFinal(final) {
+        console.log('final', final);
         //hang on and wait to read a value to finish:
         let finishReason = 'no finish reason';
 
-        finishPromise.then(finishReason => {
-          console.log('finishing with reason', finishReason);
-          data.append({ text: `finish reason ${finishReason}` });
+        finishPromise.then(reason => {
+          console.log('finishing with reason', reason);
+          data.append({ text: `finish reason ${reason}` });
+          // append a time-stamp, just a user-friendly string with the time in seconds.
+          const ts = new Date();
+          const timestamp = `${ts.getHours()}:${ts.getMinutes()}:${ts.getSeconds()}`;
+          data.append({ timestamp });
           data.close();
         });
       },
