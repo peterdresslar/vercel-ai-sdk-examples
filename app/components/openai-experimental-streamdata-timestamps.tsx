@@ -59,7 +59,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (data && enableLog) {
-      console.log(JSON.stringify(data));
+      console.log('data is now ' + JSON.stringify(data));
     }
     //setDisplayMessages with the timestamp
     if (data && data.length > 0) {
