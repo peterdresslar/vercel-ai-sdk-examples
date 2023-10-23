@@ -1,7 +1,7 @@
 'use client';
 
 import { useChat, Message } from 'ai/react';
-import { FormEvent, useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface DisplayMessage extends Message {
   timestamp?: any; // Define the type as needed
@@ -11,6 +11,7 @@ export default function Chat() {
   const [providerNickname, setProviderNickname] = useState('ChatGPT-3.5');
   const [displayMessages, setDisplayMessages] = useState<DisplayMessage[]>([]);
   const [enableLog, setEnableLog] = useState(false);
+  const [timestampMap, setTimestampMap] = useState(new Map<string, string>()); // Map of messageId to timeStamp
   const [finishReason, setFinishReason] = useState('');
   const {
     messages,
@@ -24,44 +25,77 @@ export default function Chat() {
     api: './api/chat/openai-experimental-streamdata',
   });
 
-  // Utility function to set the timestamp to each message
-  const setDisplayMessagesTimestamp = (data: any[]) => {
-    let extendedMessages: DisplayMessage[] = [
-      ...(messages as DisplayMessage[]),
-    ];
-    let dataPointer = 0;
-    let isChanged = false;
+  // Utility function to update the timestampMap
+  const updateTimestampMap = (data: any[]) => {
+    let newTimestampMap = new Map(timestampMap);
+    let timestampIndex = 0; // To match the timestamp with assistant message
 
-    for (let i = 0; i < extendedMessages.length; i++) {
-      if (extendedMessages[i].role === 'assistant') {
-        while (dataPointer < data.length && !data[dataPointer].timestamp) {
-          dataPointer++;
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].timestamp) {
+        while (
+          timestampIndex < messages.length &&
+          messages[timestampIndex].role !== 'assistant'
+        ) {
+          timestampIndex++;
         }
 
-        if (dataPointer < data.length && data[dataPointer].timestamp) {
-          if (extendedMessages[i].timestamp !== data[dataPointer].timestamp) {
-            extendedMessages[i].timestamp = data[dataPointer].timestamp;
-            isChanged = true;
-          }
-          dataPointer++;
+        if (timestampIndex < messages.length) {
+          const assistantMessage = messages[timestampIndex];
+          newTimestampMap.set(assistantMessage.id, data[i].timestamp);
+          timestampIndex++;
         }
       }
     }
 
-    if (isChanged) {
-      setDisplayMessages(extendedMessages);
-    }
+    setTimestampMap(newTimestampMap);
   };
 
+  const lastData = useRef(null);
+
   useEffect(() => {
-    if (data && enableLog) {
-      console.log('data is now ' + JSON.stringify(data));
+    if (enableLog) {
+      console.log('data', JSON.stringify(data));
     }
-    //setDisplayMessages with the timestamp
     if (data && data.length > 0) {
-      setDisplayMessagesTimestamp(data);
+      //check if data is the same as lastData
+      if (JSON.stringify(data) !== JSON.stringify(lastData.current)) {
+        updateTimestampMap(data);
+        lastData.current = data;
+      }
     }
-  }, [data, enableLog, setDisplayMessagesTimestamp]);
+  }, [data]);
+
+  //sync messages to displayMessages
+  useEffect(() => {
+    if (enableLog) {
+      console.log('messages', JSON.stringify(messages));
+    }
+    const updatedDisplayMessages = [...displayMessages]; // Start with a copy of the existing displayMessages
+
+    messages.forEach((newMsg, index) => {
+      const existingMsgIndex = updatedDisplayMessages.findIndex(
+        displayMsg => displayMsg.id === newMsg.id,
+      );
+
+      if (existingMsgIndex === -1) {
+        // New message, add it to displayMessages
+        updatedDisplayMessages.push({
+          ...newMsg,
+          timestamp: timestampMap.get(newMsg.id) || null, // Add the timestamp here
+        });
+      } else {
+        // Existing message, update content but keep existing timestamp
+        updatedDisplayMessages[existingMsgIndex] = {
+          ...newMsg,
+          timestamp:
+            timestampMap.get(newMsg.id) ||
+            updatedDisplayMessages[existingMsgIndex].timestamp, // Update or keep the existing timestamp
+        };
+      }
+    });
+
+    setDisplayMessages(updatedDisplayMessages);
+  }, [messages]);
 
   return (
     <div>
@@ -79,7 +113,6 @@ export default function Chat() {
           </span>
         </div>
       ))}
-      <div className="text-blue-500 text-sm">{finishReason}</div>
 
       {/* These items are not in the example, but very helpful helper functions */}
       {isLoading ? (

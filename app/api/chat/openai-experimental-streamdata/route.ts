@@ -46,7 +46,6 @@ export async function POST(req: Request) {
     const stream = OpenAIStream(newResponse, {
       onToken(token) {
         console.log('token', token);
-        console.log(token);
       },
       onCompletion(completion) {
         console.log('completion', completion);
@@ -83,7 +82,6 @@ export async function POST(req: Request) {
       }
 
       const text = new TextDecoder('utf-8').decode(value);
-      console.log(`testing text: ${text}`);
       const match = regex.exec(text);
 
       if (match && match[1]) {
