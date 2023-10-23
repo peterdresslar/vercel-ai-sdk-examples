@@ -28,26 +28,29 @@ export default function Chat() {
   // Utility function to update the timestampMap
   const updateTimestampMap = (data: any[]) => {
     let newTimestampMap = new Map(timestampMap);
-    let timestampIndex = 0; // To match the timestamp with assistant message
+    // Initialize an index to zero for matching messages from the assistant to timestamps.
+    let timestampIndex = 0;
 
+    // If we are here, `data` has updated. Let's loop through it and update the timestampMap
     for (let i = 0; i < data.length; i++) {
       if (data[i].timestamp) {
         while (
           timestampIndex < messages.length &&
-          messages[timestampIndex].role !== 'assistant'
+          messages[timestampIndex].role !== 'assistant' // we are only matching up with assistant since we have timestamps from the server, here.
         ) {
           timestampIndex++;
         }
 
         if (timestampIndex < messages.length) {
-          const assistantMessage = messages[timestampIndex];
-          newTimestampMap.set(assistantMessage.id, data[i].timestamp);
+          const assistantMessage = messages[timestampIndex]; // sync up with index values
+          newTimestampMap.set(assistantMessage.id, data[i].timestamp); // and update the map
           timestampIndex++;
         }
       }
     }
-
+    // Replace the old map with the updated map
     setTimestampMap(newTimestampMap);
+    console.log('timestampMap', timestampMap);
   };
 
   const lastData = useRef(null);
@@ -57,9 +60,9 @@ export default function Chat() {
       console.log('data', JSON.stringify(data));
     }
     if (data && data.length > 0) {
-      //check if data is the same as lastData
+      //check if data is the same as lastData. Only processes the timestampMap if data has changed.
       if (JSON.stringify(data) !== JSON.stringify(lastData.current)) {
-        updateTimestampMap(data);
+        updateTimestampMap(data); //send `data` to the helper function
         lastData.current = data;
       }
     }
@@ -70,49 +73,42 @@ export default function Chat() {
     if (enableLog) {
       console.log('messages', JSON.stringify(messages));
     }
-    const updatedDisplayMessages = [...displayMessages]; // Start with a copy of the existing displayMessages
+    // sync up and make sure we have the correct timestamps
+    setDisplayMessages(prevDisplayMessages => {
+      return messages.map(newMsg => {
+        const existingMsg = prevDisplayMessages.find(
+          displayMsg => displayMsg.id === newMsg.id,
+        );
 
-    messages.forEach((newMsg, index) => {
-      const existingMsgIndex = updatedDisplayMessages.findIndex(
-        displayMsg => displayMsg.id === newMsg.id,
-      );
-
-      if (existingMsgIndex === -1) {
-        // New message, add it to displayMessages
-        updatedDisplayMessages.push({
-          ...newMsg,
-          timestamp: timestampMap.get(newMsg.id) || null, // Add the timestamp here
-        });
-      } else {
-        // Existing message, update content but keep existing timestamp
-        updatedDisplayMessages[existingMsgIndex] = {
+        return {
           ...newMsg,
           timestamp:
-            timestampMap.get(newMsg.id) ||
-            updatedDisplayMessages[existingMsgIndex].timestamp, // Update or keep the existing timestamp
+            timestampMap.get(newMsg.id) || existingMsg?.timestamp || null,
         };
-      }
+      });
     });
-
-    setDisplayMessages(updatedDisplayMessages);
-  }, [messages]);
+  }, [messages, timestampMap]);
 
   return (
     <div>
-      {displayMessages.map(m => (
-        <div key={m.id}>
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
-          <span className="ml-2 text-sm font-mono">
-            {m.role === 'assistant' ? (
-              <>
-                Server timestamp: {m.timestamp} Client timestamp:{' '}
-                {m.createdAt ? m.createdAt.toTimeString() : 'N/A'}
-              </>
-            ) : null}
-          </span>
-        </div>
-      ))}
+      {displayMessages.map(
+        (
+          m, // note we are using our extended displayMessages here
+        ) => (
+          <div key={m.id}>
+            {m.role === 'user' ? 'User: ' : 'AI: '}
+            {m.content}
+            <span className="ml-2 text-sm font-mono">
+              {m.role === 'assistant' ? (
+                <>
+                  Server timestamp: {m.timestamp} Client timestamp:{' '}
+                  {m.createdAt ? m.createdAt.toTimeString() : 'N/A'}
+                </>
+              ) : null}
+            </span>
+          </div>
+        ),
+      )}
 
       {/* These items are not in the example, but very helpful helper functions */}
       {isLoading ? (
