@@ -4,7 +4,9 @@ import { useChat } from 'ai/react';
 import { useEffect, useState } from 'react';
 
 export default function Chat() {
-  const [providerNickname, setProviderNickname] = useState('ChatGPT-3.5');
+  const [providerNickname, setProviderNickname] = useState(
+    'ChatGPT-3.5 custom weather',
+  );
   const [enableLog, setEnableLog] = useState(false);
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
     useChat({
