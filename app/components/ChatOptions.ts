@@ -19,6 +19,12 @@ export const ChatOptions: ChatOption[] = [
     label: 'Anthropic Chat',
     component: 'anthropic-chat.tsx',
   },
+  //google PLM
+  {
+    name: 'google-plm',
+    label: 'Google PLM',
+    component: 'google-plm.tsx',
+  },
   //completion
   {
     name: 'completion',
